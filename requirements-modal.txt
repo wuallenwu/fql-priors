@@ -1,0 +1,15 @@
+# OGBench-only deps for Modal (no D4RL). Pin versions once a run works.
+ogbench==1.1.0
+gymnasium[mujoco]==0.29.1
+mujoco<4  # ogbench 1.1.0 predates mujoco 4
+numpy<2  # gymnasium 0.29.1 uses np.bool8, removed in numpy 2
+jax[cuda12]
+flax
+optax
+distrax
+ml_collections
+wandb==0.28.2  # 0.29+ rejects wandb.Settings(start_method=...) used in utils/log_utils.py
+matplotlib
+moviepy
+tqdm
+absl-py

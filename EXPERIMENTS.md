@@ -63,6 +63,15 @@ modal volume get fql-priors exp/fql/<path>/eval.csv ./local/eval.csv
 | 2026-11-17 14:43 | `alpha_sweep/a100/scene-play-singletask-v0/flow/sd000_20261117_194427` | scene-play-singletask-v0 | flow | 0 | 1M | `--agent.alpha=100` `--eval_interval=50000 --save_interval=100000` | running | Per-prior alpha sweep (does alpha explain the scene gap?). Published alpha=300 runs are the midway seed-0 runs. flags.json verified. |
 | 2026-11-17 14:43 | `alpha_sweep/a1000/scene-play-singletask-v0/flow/sd000_20261117_194503` | scene-play-singletask-v0 | flow | 0 | 1M | `--agent.alpha=1000` `--eval_interval=50000 --save_interval=100000` | running | Per-prior alpha sweep (does alpha explain the scene gap?). Published alpha=300 runs are the midway seed-0 runs. flags.json verified. |
 | 2026-11-17 15:00 | analysis → `/vol/analysis/action_support_<env>.csv` | all 3 midway envs | all | 0,1,2 | (ckpts 100k..1M) | `analysis/action_support.py` defaults: 512 val states, 32 noises, k=10 | running | Action-support analysis on all 27 midway runs (spread, kNN distance to dataset actions, Q). Smoke-tested on `smoke/` ckpt first. |
+| 2026-11-17 08:20 | `alpha/antmaze-large-navigate-singletask-v0/flow/alpha3/sd000_<pending>` | antmaze-large-navigate-singletask-v0 | flow | 0 | 1M | `--agent.q_agg=min --agent.alpha=3 --eval_interval=50000 --save_interval=100000` | running (app `ap-apOOUWia8tEOUmncMiXQYV`) | Alpha sweep stage 1 (published alpha=10). |
+| 2026-11-17 08:20 | `alpha/antmaze-large-navigate-singletask-v0/flow/alpha30/sd000_<pending>` | antmaze-large-navigate-singletask-v0 | flow | 0 | 1M | `--agent.q_agg=min --agent.alpha=30 --eval_interval=50000 --save_interval=100000` | running (app `ap-apOOUWia8tEOUmncMiXQYV`) | Alpha sweep stage 1 (published alpha=10). |
+| 2026-11-17 08:20 | `alpha/antmaze-large-navigate-singletask-v0/flow/alpha100/sd000_<pending>` | antmaze-large-navigate-singletask-v0 | flow | 0 | 1M | `--agent.q_agg=min --agent.alpha=100 --eval_interval=50000 --save_interval=100000` | running (app `ap-apOOUWia8tEOUmncMiXQYV`) | Alpha sweep stage 1 (published alpha=10). |
+| 2026-11-17 08:20 | `alpha/scene-play-singletask-v0/mip/alpha100/sd000_<pending>` | scene-play-singletask-v0 | mip | 0 | 1M | `--agent.alpha=100 --eval_interval=50000 --save_interval=100000` | running (app `ap-ZpwoAWuFLv1HtHMAzm3Xoj`) | Alpha sweep stage 1 (published alpha=300). |
+| 2026-11-17 08:20 | `alpha/scene-play-singletask-v0/mip/alpha1000/sd000_<pending>` | scene-play-singletask-v0 | mip | 0 | 1M | `--agent.alpha=1000 --eval_interval=50000 --save_interval=100000` | running (app `ap-ZpwoAWuFLv1HtHMAzm3Xoj`) | Alpha sweep stage 1 (published alpha=300). |
+| 2026-11-17 08:20 | `alpha/scene-play-singletask-v0/mip/alpha3000/sd000_<pending>` | scene-play-singletask-v0 | mip | 0 | 1M | `--agent.alpha=3000 --eval_interval=50000 --save_interval=100000` | running (app `ap-ZpwoAWuFLv1HtHMAzm3Xoj`) | Alpha sweep stage 1 (published alpha=300). |
+| 2026-11-17 08:20 | `alpha/scene-play-singletask-v0/regression/alpha100/sd000_<pending>` | scene-play-singletask-v0 | regression | 0 | 1M | `--agent.alpha=100 --eval_interval=50000 --save_interval=100000` | running (app `ap-ZpwoAWuFLv1HtHMAzm3Xoj`) | Alpha sweep stage 1 (published alpha=300). |
+| 2026-11-17 08:20 | `alpha/scene-play-singletask-v0/regression/alpha1000/sd000_<pending>` | scene-play-singletask-v0 | regression | 0 | 1M | `--agent.alpha=1000 --eval_interval=50000 --save_interval=100000` | running (app `ap-ZpwoAWuFLv1HtHMAzm3Xoj`) | Alpha sweep stage 1 (published alpha=300). |
+| 2026-11-17 08:20 | `alpha/scene-play-singletask-v0/regression/alpha3000/sd000_<pending>` | scene-play-singletask-v0 | regression | 0 | 1M | `--agent.alpha=3000 --eval_interval=50000 --save_interval=100000` | running (app `ap-ZpwoAWuFLv1HtHMAzm3Xoj`) | Alpha sweep stage 1 (published alpha=300). |
 
 ## Planned (not launched; needs approval)
 
@@ -71,6 +80,8 @@ modal volume get fql-priors exp/fql/<path>/eval.csv ./local/eval.csv
 | 1 (launched, see above) | `midway` | cube-single-play-singletask-v0 | flow, mip, regression | 0 | 1M | published alpha (300); `--eval_interval=50000 --save_interval=100000` |
 | 2 (launched, see above) | `midway` | antmaze-large-navigate-singletask-v0 (alpha=10, q_agg=min), scene-play-singletask-v0 (alpha=300) | flow, mip, regression | 0 | 1M | same |
 | 3 (launched, see above) | `midway` | all three envs | flow, mip, regression | 1, 2 | 1M | same |
+| alpha stage 1 (launched, see above) | `alpha` | antmaze-large (flow: alpha 3, 30, 100), scene-play (mip, regression: alpha 100, 1000, 3000) | losing arm per env | 0 | 1M | published flags with alpha replaced |
+| alpha stage 2 (only if a stage-1 arm reaches the winner's seed range) | `alpha` | same cells | all priors at their best alpha | 0, 1, 2 | 1M | same |
 
 Launch command (per wave):
 ```
@@ -86,4 +97,5 @@ modal run --detach modal_app.py::batch --envs <env1,env2> --priors flow,mip,regr
 | Wave 1 | 3 | 2.3 | ~45 min per 1M-step run on cube-single |
 | Wave 2 | 6 | 7.4 | antmaze 45-74 min, scene-play 86-99 min per 1M-step run (wall time from train.csv) |
 | Wave 3 | 18 | 18.6 | wall time from train.csv: cube 39-65 min, antmaze 45-89 min, scene 65-88 min; all 18 finished in ~2 h 5 min wall-clock (app `ap-gWYSASyRHUbY8HuSL7HD4A`) |
-| **Total so far** | 28 | **~29** | all 27 midway runs done |
+| Alpha sweep stage 1 | 9 | ~11 (in progress) | 3 antmaze (~55 min), 6 scene (~80 min) |
+| **Total so far** | 37 | **~29 done, ~40 expected** | |

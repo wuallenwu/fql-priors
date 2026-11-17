@@ -25,12 +25,12 @@ Status as of Sun Nov 16: repo = unmodified FQL (verified identical to upstream e
 - [x] Modal smoke test: MIP on cube-single, 20k steps: no NaNs, prior_spread = 0, 66% success at 20k,
       2 checkpoints + flags.json on the volume (`exp/fql/smoke/sd000_20261117_040542`).
 - [ ] Decide wandb mode for real runs (online via `USE_WANDB=1` makes plotting easier).
-- [ ] Add `--save_interval=100000` to every run (default 1M means no checkpoint at 500k steps);
+- [ ] Add `--save_interval=100000` to every run (default 1M means no checkpoint at 1M steps);
       ~20 MB each, 5 per run, saved to `/vol/exp/...` next to `flags.json`.
 
 ## 3. Experiments (Mon → Tue) — ask before launching each wave
 
-- [ ] Wave 1: cube-single, 3 priors, seed 0, 500k steps, `--agent.alpha=300`.
+- [ ] Wave 1: cube-single, 3 priors, seed 0, 1M steps, `--agent.alpha=300`.
       Flow prior doubles as the FQL reproduction check.
 - [ ] Wave 2: antmaze-large-navigate (`--agent.alpha=10 --agent.q_agg=min`) and
       scene-play (`--agent.alpha=300`), 3 priors, seed 0.

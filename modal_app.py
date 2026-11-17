@@ -78,7 +78,7 @@ def batch(
     priors: str = 'flow,mip,regression',
     seeds: str = '0',
     run_group: str = 'midway',
-    flags: str = '--offline_steps=500000 --eval_interval=50000 --save_interval=100000',
+    flags: str = '--offline_steps=1000000 --eval_interval=50000 --save_interval=100000',
 ):
     for env_name in envs.split(','):
         for prior in priors.split(','):

@@ -1,8 +1,12 @@
 """Run FQL training on Modal.
 
 Single run:
-    modal run modal_app.py --env-name cube-single-play-singletask-v0 \
+    modal run modal_app.py::main --env-name cube-single-play-singletask-v0 \
         --flags "--offline_steps=20000 --eval_interval=10000 --agent.alpha=300"
+
+Batch (one container per env x prior x seed, in parallel; --detach keeps them alive after this exits):
+    modal run --detach modal_app.py::batch --envs cube-single-play-singletask-v0 \
+        --priors flow,mip,regression --seeds 0,1 --run-group midway
 
 wandb: set USE_WANDB=1 locally to attach the "wandb" Modal secret (online logging);
 otherwise runs log to wandb offline inside /vol/exp.
@@ -32,7 +36,7 @@ app = modal.App('fql-priors', image=image)
 # main.py hardcodes wandb.init(mode='online'), which beats WANDB_MODE, so force the mode here.
 # shortcut: monkeypatch until main.py gets a --wandb_mode flag (commit 4).
 SHIM = (
-    "import os, runpy, sys, wandb; _init = wandb.init; "
+    "import os, runpy, sys, jax, wandb; print('jax devices:', jax.devices(), flush=True); _init = wandb.init; "
     "wandb.init = lambda **k: _init(**{**k, 'mode': os.environ['WANDB_MODE']}); "
     "sys.argv[0] = 'main.py'; runpy.run_path('main.py', run_name='__main__')"
 )
@@ -58,3 +62,33 @@ def train(env_name: str, seed: int = 0, extra_flags: list[str] = ()):
 @app.local_entrypoint()
 def main(env_name: str = 'cube-single-play-singletask-v0', seed: int = 0, flags: str = ''):
     train.remote(env_name, seed, shlex.split(flags))
+
+
+# FQL's published flags per env (github.com/seohongpark/fql README).
+PUBLISHED_FLAGS = {
+    'cube-single-play-singletask-v0': '--agent.alpha=300',
+    'scene-play-singletask-v0': '--agent.alpha=300',
+    'antmaze-large-navigate-singletask-v0': '--agent.q_agg=min --agent.alpha=10',
+}
+
+
+@app.local_entrypoint()
+def batch(
+    envs: str,
+    priors: str = 'flow,mip,regression',
+    seeds: str = '0',
+    run_group: str = 'midway',
+    flags: str = '--offline_steps=500000 --eval_interval=50000 --save_interval=100000',
+):
+    for env_name in envs.split(','):
+        for prior in priors.split(','):
+            for seed in seeds.split(','):
+                run_flags = [
+                    '--agent=agents/fql_prior.py',
+                    f'--agent.prior={prior}',
+                    f'--run_group={run_group}',
+                    *shlex.split(PUBLISHED_FLAGS[env_name]),
+                    *shlex.split(flags),
+                ]
+                train.spawn(env_name, int(seed), run_flags)
+                print(f'spawned {env_name} prior={prior} seed={seed}')

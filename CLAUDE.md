@@ -116,6 +116,11 @@ Skip puzzle-3x3 for now (low FQL scores make gaps hard to read).
   (OGBench data cached at `/vol/ogbench`, runs saved to `/vol/exp`).
 - `requirements-modal.txt` — pinned deps for Modal (numpy<2, mujoco<4, wandb==0.28.2;
   see comments there for why).
+- `agents/fql_prior.py` — copy of `fql.py` with `--agent.prior={flow,mip,regression}`;
+  see `diff agents/fql.py agents/fql_prior.py` for the changes.
+- `EXPERIMENTS.md` — log of every Modal run (flags, status, result path). Add a row when
+  launching, fill in the outcome when it finishes.
+- `TODO.md` — task list for the midway report.
 
 Run (smoke test first, always):
 ```
@@ -127,10 +132,14 @@ Batch (parallel, one container per env x prior x seed; `--detach` keeps runs ali
 modal run --detach modal_app.py::batch --envs cube-single-play-singletask-v0 \
     --priors flow,mip,regression --seeds 0,1 --run-group midway
 ```
-Logs persist only as `train.csv` / `eval.csv` / `flags.json` / `params_*.pkl` under `/vol/exp`;
-offline wandb files land in the container's `/tmp` and are lost.
-wandb: set `USE_WANDB=1` locally to attach the `wandb` Modal secret (online logging);
-otherwise runs log offline inside `/vol/exp`. `modal_app.py` currently monkeypatches
+`--run-group` (FQL's `--run_group` flag, default `Debug`) is the wandb group and a directory
+level in the save path. Results: `/vol/exp/fql/<group>/<env>/<prior>/sd<seed>_<time>/` for
+batch runs, `/vol/exp/fql/<group>/sd<seed>_<time>/` for single runs, each holding
+`flags.json`, `train.csv` (incl. `prior_spread`, `onestep_spread`), `eval.csv`, and
+`params_<step>.pkl` checkpoints. These CSVs are the record; offline wandb files land in the
+container's `/tmp` and are lost. Fetch with `modal volume get fql-priors exp/fql/<path> <local>`.
+wandb: set `USE_WANDB=1` locally to attach the `wandb` Modal secret (online logging; the
+secret does not exist yet in the `dguo3` workspace). `modal_app.py` currently monkeypatches
 `wandb.init` because `main.py` hardcodes `mode='online'` (temporary until `main.py` gets
 a `--wandb_mode` flag).
 

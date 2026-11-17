@@ -51,3 +51,13 @@ Launch command (per wave):
 ```
 modal run --detach modal_app.py::batch --envs <env1,env2> --priors flow,mip,regression --seeds <0 | 1,2> --run-group midway
 ```
+
+## Compute usage (A10G GPU-hours, estimated from run durations; exact figure: Modal dashboard > Usage)
+
+| Launch | Runs | Approx. GPU-h | Notes |
+|---|---|---|---|
+| Image build + dataset downloads | - | < 0.5 | one-time per workspace / env |
+| Smoke test | 1 | 0.1 | 20k steps, 4 min |
+| Wave 1 | 3 | 2.3 | ~45 min per 1M-step run on cube-single |
+| Wave 2 | 6 | ~5-6 (in progress) | scene-play slower per step |
+| **Total so far** | 10 | **~8** | |

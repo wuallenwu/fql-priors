@@ -119,9 +119,16 @@ Skip puzzle-3x3 for now (low FQL scores make gaps hard to read).
 
 Run (smoke test first, always):
 ```
-modal run modal_app.py --env-name cube-single-play-singletask-v0 \
+modal run modal_app.py::main --env-name cube-single-play-singletask-v0 \
     --flags "--offline_steps=20000 --eval_interval=10000 --agent.alpha=300"
 ```
+Batch (parallel, one container per env x prior x seed; `--detach` keeps runs alive after exit):
+```
+modal run --detach modal_app.py::batch --envs cube-single-play-singletask-v0 \
+    --priors flow,mip,regression --seeds 0,1 --run-group midway
+```
+Logs persist only as `train.csv` / `eval.csv` / `flags.json` / `params_*.pkl` under `/vol/exp`;
+offline wandb files land in the container's `/tmp` and are lost.
 wandb: set `USE_WANDB=1` locally to attach the `wandb` Modal secret (online logging);
 otherwise runs log offline inside `/vol/exp`. `modal_app.py` currently monkeypatches
 `wandb.init` because `main.py` hardcodes `mode='online'` (temporary until `main.py` gets

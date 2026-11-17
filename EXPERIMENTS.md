@@ -32,13 +32,19 @@ modal volume get fql-priors exp/fql/<path>/eval.csv ./local/eval.csv
 | 2026-11-16 23:18 | `midway/cube-single-play-singletask-v0/flow/sd000_20261117_041758` | cube-single-play-singletask-v0 | flow | 0 | 1M | `--agent.alpha=300 --eval_interval=50000 --save_interval=100000` | done (~45 min) | Wave 1. Final success 0.98 (last-3 mean 0.98); FQL reproduces (paper: ~0.9+). prior_spread 0.06, onestep_spread 0.06. |
 | 2026-11-16 23:18 | `midway/cube-single-play-singletask-v0/mip/sd000_20261117_041758` | cube-single-play-singletask-v0 | mip | 0 | 1M | same | done (~45 min) | Wave 1. Final 0.96 (last-3 0.96). prior_spread 0, onestep_spread 0.002. |
 | 2026-11-16 23:18 | `midway/cube-single-play-singletask-v0/regression/sd000_20261117_041759` | cube-single-play-singletask-v0 | regression | 0 | 1M | same | done (~45 min) | Wave 1. Final 0.98 (last-3 0.93, noisier). prior_spread 0, onestep_spread 0.003. |
+| 2026-11-17 00:02 | `midway/antmaze-large-navigate-singletask-v0/flow/sd000_20261117_050225` | antmaze-large-navigate-singletask-v0 | flow | 0 | 1M | `--agent.q_agg=min --agent.alpha=10 --eval_interval=50000 --save_interval=100000` | running (app `ap-IM7B4zivMwsokfkB6mh7Zq`) | Wave 2. |
+| 2026-11-17 00:02 | `midway/antmaze-large-navigate-singletask-v0/mip/sd000_20261117_050227` | antmaze-large-navigate-singletask-v0 | mip | 0 | 1M | `--agent.q_agg=min --agent.alpha=10 --eval_interval=50000 --save_interval=100000` | running (app `ap-IM7B4zivMwsokfkB6mh7Zq`) | Wave 2. |
+| 2026-11-17 00:02 | `midway/antmaze-large-navigate-singletask-v0/regression/sd000_20261117_050225` | antmaze-large-navigate-singletask-v0 | regression | 0 | 1M | `--agent.q_agg=min --agent.alpha=10 --eval_interval=50000 --save_interval=100000` | running (app `ap-IM7B4zivMwsokfkB6mh7Zq`) | Wave 2. |
+| 2026-11-17 00:02 | `midway/scene-play-singletask-v0/flow/sd000_20261117_050227` | scene-play-singletask-v0 | flow | 0 | 1M | `--agent.alpha=300 --eval_interval=50000 --save_interval=100000` | running (app `ap-IM7B4zivMwsokfkB6mh7Zq`) | Wave 2. |
+| 2026-11-17 00:02 | `midway/scene-play-singletask-v0/mip/sd000_20261117_050227` | scene-play-singletask-v0 | mip | 0 | 1M | `--agent.alpha=300 --eval_interval=50000 --save_interval=100000` | running (app `ap-IM7B4zivMwsokfkB6mh7Zq`) | Wave 2. |
+| 2026-11-17 00:02 | `midway/scene-play-singletask-v0/regression/sd000_20261117_050227` | scene-play-singletask-v0 | regression | 0 | 1M | `--agent.alpha=300 --eval_interval=50000 --save_interval=100000` | running (app `ap-IM7B4zivMwsokfkB6mh7Zq`) | Wave 2. |
 
 ## Planned (not launched; needs approval)
 
 | Wave | Group | Envs | Priors | Seeds | Steps | Flags |
 |---|---|---|---|---|---|---|
 | 1 (launched, see above) | `midway` | cube-single-play-singletask-v0 | flow, mip, regression | 0 | 1M | published alpha (300); `--eval_interval=50000 --save_interval=100000` |
-| 2 | `midway` | antmaze-large-navigate-singletask-v0 (alpha=10, q_agg=min), scene-play-singletask-v0 (alpha=300) | flow, mip, regression | 0 | 1M | same |
+| 2 (launched, see above) | `midway` | antmaze-large-navigate-singletask-v0 (alpha=10, q_agg=min), scene-play-singletask-v0 (alpha=300) | flow, mip, regression | 0 | 1M | same |
 | 3 | `midway` | all three envs | flow, mip, regression | 1, 2 | 1M | same |
 
 Launch command (per wave):

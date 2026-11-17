@@ -15,6 +15,7 @@ otherwise runs log to wandb offline inside /vol/exp.
 import os
 import shlex
 import subprocess
+import time
 
 import modal
 
@@ -53,8 +54,13 @@ def train(env_name: str, seed: int = 0, extra_flags: list[str] = ()):
     env = dict(os.environ, WANDB_MODE='online' if os.environ.get('WANDB_API_KEY') else 'offline')
     cmd = ['python', '-c', SHIM, f'--env_name={env_name}', f'--seed={seed}', f'--save_dir={VOL}/exp', *extra_flags]
     print(' '.join(shlex.quote(c) for c in cmd), flush=True)
+    proc = subprocess.Popen(cmd, cwd=REPO, env=env)
     try:
-        subprocess.run(cmd, cwd=REPO, env=env, check=True)
+        while proc.poll() is None:
+            time.sleep(300)
+            volume.commit()  # make train.csv / eval.csv / checkpoints visible while the run is in progress
+        if proc.returncode:
+            raise subprocess.CalledProcessError(proc.returncode, cmd)
     finally:
         volume.commit()  # keep partial logs/checkpoints even if the run fails
 

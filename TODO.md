@@ -34,7 +34,7 @@ Status as of Sun Nov 16: repo = unmodified FQL (verified identical to upstream e
       Flow prior doubles as the FQL reproduction check.
 - [ ] Wave 2: antmaze-large-navigate (`--agent.alpha=10 --agent.q_agg=min`) and
       scene-play (`--agent.alpha=300`), 3 priors, seed 0.
-- [ ] Wave 3: seed 1 for everything, as soon as wave 1 looks healthy.
+- [ ] Wave 3: seeds 1 and 2 for everything (18 runs), as soon as wave 1 looks healthy.
 - [ ] Record GPU-hours per run from the Modal dashboard.
 - [ ] Optional, only if waves 1-3 are launched by Mon morning: cube-single at alpha ∈ {100, 1000}
       for each prior (6 runs), to see whether the prior gap moves with alpha.

@@ -102,8 +102,8 @@ OGBench, state-based, default task of each env, FQL's published hyperparameters:
 | `antmaze-large-navigate-singletask-v0` | `--agent.alpha=10 --agent.q_agg=min` (navigation) |
 
 Skip puzzle-3x3 for now (low FQL scores make gaps hard to read).
-3 tasks × 3 priors × 2 seeds = 18 runs at 500k steps (FQL uses 1M), eval every 50k
-(`--offline_steps=500000 --eval_interval=50000`).
+3 tasks × 3 priors × 3 seeds = 27 runs at 1M steps (FQL's budget), eval every 50k,
+checkpoint every 100k (the `modal_app.py::batch` defaults).
 
 ## Repo map and running
 

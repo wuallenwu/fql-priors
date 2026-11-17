@@ -39,9 +39,9 @@ modal volume get fql-priors exp/fql/<path>/eval.csv ./local/eval.csv
 |---|---|---|---|---|---|---|
 | 1 (launched, see above) | `midway` | cube-single-play-singletask-v0 | flow, mip, regression | 0 | 1M | published alpha (300); `--eval_interval=50000 --save_interval=100000` |
 | 2 | `midway` | antmaze-large-navigate-singletask-v0 (alpha=10, q_agg=min), scene-play-singletask-v0 (alpha=300) | flow, mip, regression | 0 | 1M | same |
-| 3 | `midway` | all three | flow, mip, regression | 1 | 1M | same |
+| 3 | `midway` | all three envs | flow, mip, regression | 1, 2 | 1M | same |
 
 Launch command (per wave):
 ```
-modal run --detach modal_app.py::batch --envs <env1,env2> --priors flow,mip,regression --seeds <0 or 1> --run-group midway
+modal run --detach modal_app.py::batch --envs <env1,env2> --priors flow,mip,regression --seeds <0 | 1,2> --run-group midway
 ```

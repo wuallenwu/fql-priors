@@ -1,7 +1,7 @@
 """FQL with a configurable behavior prior: flow (FQL default), MIP, or regression.
 
 Copy of agents/fql.py; only the prior's training loss (actor_loss), its sampler
-(compute_flow_actions), and get_config differ. All priors use the
+(compute_flow_actions), the spread metrics, and get_config differ. All priors use the
 same ActorVectorField network. For flow its output is a velocity; for MIP and regression
 its output is the action itself. MIP follows Pan et al. (2025), Eq. 4.4, with t* = mip_t.
 Loss convention for every prior: jnp.mean over all elements (FQL style).
@@ -102,8 +102,18 @@ class FQLPriorAgent(flax.struct.PyTreeNode):
         actor_loss = bc_flow_loss + self.config['alpha'] * distill_loss + q_loss
 
         # Additional metrics for logging.
+        rng, spread_rng = jax.random.split(rng)
         actions = self.sample_actions(batch['observations'], seed=rng)
         mse = jnp.mean((actions - batch['actions']) ** 2)
+
+        # Spread (std across noise samples at fixed observations) of the prior and the one-step policy.
+        # Deterministic priors (MIP, regression) should give ~0 and pull the one-step policy toward ~0 too.
+        spread_obs = batch['observations'][:16]
+        spread_noises = jax.random.normal(spread_rng, (8, *spread_obs.shape[:-1], action_dim))
+        prior_actions = jax.vmap(lambda n: self.compute_flow_actions(spread_obs, noises=n))(spread_noises)
+        onestep_actions = jax.vmap(lambda n: self.network.select('actor_onestep_flow')(spread_obs, n))(spread_noises)
+        prior_spread = jnp.std(prior_actions, axis=0).mean()
+        onestep_spread = jnp.std(jnp.clip(onestep_actions, -1, 1), axis=0).mean()
 
         return actor_loss, {
             'actor_loss': actor_loss,
@@ -112,6 +122,8 @@ class FQLPriorAgent(flax.struct.PyTreeNode):
             'q_loss': q_loss,
             'q': q.mean(),
             'mse': mse,
+            'prior_spread': prior_spread,
+            'onestep_spread': onestep_spread,
         }
 
     @jax.jit

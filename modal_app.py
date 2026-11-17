@@ -86,7 +86,7 @@ def batch(
                 run_flags = [
                     '--agent=agents/fql_prior.py',
                     f'--agent.prior={prior}',
-                    f'--run_group={run_group}',
+                    f'--run_group={run_group}/{env_name}/{prior}',  # -> /vol/exp/fql/<group>/<env>/<prior>/sd<seed>_<time>/
                     *shlex.split(PUBLISHED_FLAGS[env_name]),
                     *shlex.split(flags),
                 ]

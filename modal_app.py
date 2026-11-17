@@ -98,3 +98,21 @@ def batch(
                 ]
                 train.spawn(env_name, int(seed), run_flags)
                 print(f'spawned {env_name} prior={prior} seed={seed}')
+
+
+@app.function(gpu='A10G', timeout=2 * 3600, volumes={VOL: volume})
+def analyze(script_args: list[str]):
+    os.makedirs(f'{VOL}/ogbench', exist_ok=True)
+    link = os.path.expanduser('~/.ogbench')
+    if not os.path.lexists(link):
+        os.symlink(f'{VOL}/ogbench', link)
+    try:
+        subprocess.run(['python', 'analysis/action_support.py', *script_args], cwd=REPO, check=True, env=dict(os.environ, PYTHONPATH=REPO))
+    finally:
+        volume.commit()
+
+
+@app.local_entrypoint()
+def action_support(args: str):
+    """modal run modal_app.py::action_support --args "--runs '/vol/exp/fql/midway/<env>/*/sd*' --out /vol/analysis/x.csv"."""
+    analyze.remote(shlex.split(args))

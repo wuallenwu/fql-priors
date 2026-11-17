@@ -85,19 +85,32 @@ def batch(
     seeds: str = '0',
     run_group: str = 'midway',
     flags: str = '--offline_steps=1000000 --eval_interval=50000 --save_interval=100000',
+    alphas: str = '',
 ):
+    """Spawn one train() per env x prior x seed (x alpha).
+
+    alphas: optional comma-separated list that replaces each env's published alpha and adds an
+    alpha<a> directory level to the run path (for sweeps). Empty = published alpha, no extra level.
+    """
     for env_name in envs.split(','):
         for prior in priors.split(','):
-            for seed in seeds.split(','):
-                run_flags = [
-                    '--agent=agents/fql_prior.py',
-                    f'--agent.prior={prior}',
-                    f'--run_group={run_group}/{env_name}/{prior}',  # -> /vol/exp/fql/<group>/<env>/<prior>/sd<seed>_<time>/
-                    *shlex.split(PUBLISHED_FLAGS[env_name]),
-                    *shlex.split(flags),
-                ]
-                train.spawn(env_name, int(seed), run_flags)
-                print(f'spawned {env_name} prior={prior} seed={seed}')
+            for alpha in alphas.split(',') if alphas else [None]:
+                group = f'{run_group}/{env_name}/{prior}' + (f'/alpha{alpha}' if alpha else '')
+                env_flags = shlex.split(PUBLISHED_FLAGS[env_name])
+                if alpha:
+                    env_flags = [f for f in env_flags if not f.startswith('--agent.alpha=')] + [
+                        f'--agent.alpha={alpha}'
+                    ]
+                for seed in seeds.split(','):
+                    run_flags = [
+                        '--agent=agents/fql_prior.py',
+                        f'--agent.prior={prior}',
+                        f'--run_group={group}',  # -> /vol/exp/fql/<group>/sd<seed>_<time>/
+                        *env_flags,
+                        *shlex.split(flags),
+                    ]
+                    train.spawn(env_name, int(seed), run_flags)
+                    print(f'spawned {env_name} prior={prior} alpha={alpha or "published"} seed={seed}')
 
 
 @app.function(gpu='A10G', timeout=2 * 3600, volumes={VOL: volume})

@@ -18,11 +18,12 @@ Status as of Sun Nov 16: repo = unmodified FQL (verified identical to upstream e
 
 ## 2. Infrastructure (Sun/Mon)
 
-- [ ] `modal_app.py`: batch entrypoint that `train.spawn`s a list of (env, prior, seed) in parallel.
+- [x] `modal_app.py`: batch entrypoint that `train.spawn`s a list of (env, prior, seed) in parallel.
       Single-run path unchanged. Workspace cap is 10 concurrent GPUs (18 runs = ~2 batches, ~3-6 h
       wall-clock total); check nobody else in the workspace is using slots before launching.
-- [ ] Confirm `jax.devices()` shows a GPU in the Modal smoke-test log.
-- [ ] Modal smoke test: 20k steps, cube-single, each prior, seed 0 (no approval needed).
+- [x] `jax.devices()` printed at the start of every Modal run (smoke run: 78 it/s, cuda plugin installed).
+- [x] Modal smoke test: MIP on cube-single, 20k steps: no NaNs, prior_spread = 0, 66% success at 20k,
+      2 checkpoints + flags.json on the volume (`exp/fql/smoke/sd000_20261117_040542`).
 - [ ] Decide wandb mode for real runs (online via `USE_WANDB=1` makes plotting easier).
 - [ ] Add `--save_interval=100000` to every run (default 1M means no checkpoint at 500k steps);
       ~20 MB each, 5 per run, saved to `/vol/exp/...` next to `flags.json`.

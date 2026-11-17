@@ -132,6 +132,8 @@ Batch (parallel, one container per env x prior x seed; `--detach` keeps runs ali
 modal run --detach modal_app.py::batch --envs cube-single-play-singletask-v0 \
     --priors flow,mip,regression --seeds 0,1 --run-group midway
 ```
+Alpha sweep: add `--alphas 3,30,100` to replace the env's published alpha; runs then land under
+`<group>/<env>/<prior>/alpha<a>/`.
 `--run-group` (FQL's `--run_group` flag, default `Debug`) is the wandb group and a directory
 level in the save path. Results: `/vol/exp/fql/<group>/<env>/<prior>/sd<seed>_<time>/` for
 batch runs, `/vol/exp/fql/<group>/sd<seed>_<time>/` for single runs, each holding

@@ -22,7 +22,7 @@ def fetch_run(remote, local):
     os.makedirs(local, exist_ok=True)
     for f in FILES:  # always re-download: runs in progress keep appending
         r = subprocess.run(
-            ['modal', 'volume', 'get', VOLUME, f'{remote}/{f}', f'{local}/{f}'], check=False, capture_output=True
+            ['modal', 'volume', 'get', '--force', VOLUME, f'{remote}/{f}', f'{local}/{f}'], check=False, capture_output=True
         )
         print(f'{"ok " if r.returncode == 0 else "missing"} {remote}/{f}')
 

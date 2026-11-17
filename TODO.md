@@ -43,9 +43,10 @@ Status as of Sun Nov 16: repo = unmodified FQL (verified identical to upstream e
 
 - [ ] Plot script: eval return vs. step, one line per prior, per env; table of final scores.
 - [ ] Spread plot: `prior_spread` / `onestep_spread` over training, per prior.
-- [ ] Minimal action-support analysis on cube-single checkpoints: at held-out states, spread of
-      sampled actions and k-NN distance to dataset actions at nearby states.
-      (Q comparison and perturbed states: after midway.)
+- [ ] Minimal action-support analysis on the seed-0 final checkpoints of all three envs: at held-out
+      states, spread of sampled actions and k-NN distance to dataset actions at nearby states, per
+      prior and for the one-step policy. Cube-single is the near-unimodal baseline; scene and antmaze
+      are where differences should appear. (Q comparison and perturbed states: after midway.)
 
 ## 5. Report (Tue night → Wed)
 

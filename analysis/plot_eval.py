@@ -69,7 +69,8 @@ def plot_env(env, runs, out):
     for ax in (ax_s, ax_sp):
         ax.grid(alpha=0.25)
         ax.spines[['top', 'right']].set_visible(False)
-        ax.legend(frameon=False, fontsize=8)
+    ax_s.legend(frameon=False, fontsize=8, loc='lower right')
+    ax_sp.legend(frameon=False, fontsize=8, loc='upper left', bbox_to_anchor=(1.01, 1.0))
     fig.tight_layout()
     fig.savefig(out, dpi=150)
     print('wrote', out)

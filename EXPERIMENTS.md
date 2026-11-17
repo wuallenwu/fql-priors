@@ -29,9 +29,9 @@ modal volume get fql-priors exp/fql/<path>/eval.csv ./local/eval.csv
 | Date (ET) | Group / path under `exp/fql/` | Env | Prior | Seeds | Steps | Flags beyond defaults | Status | Notes |
 |---|---|---|---|---|---|---|---|---|
 | 2026-11-16 23:05 | `smoke/sd000_20261117_040542` | cube-single-play-singletask-v0 | mip | 0 | 20k | `--agent.alpha=300 --eval_interval=10000 --save_interval=10000` | done (4 min) | Smoke test of fql_prior. No NaNs; prior_spread=0; onestep_spread≈0.0035; success 0.66 at 20k. Checkpoints at 10k, 20k. |
-| 2026-11-16 23:18 | `midway/cube-single-play-singletask-v0/flow/sd000_20261117_041758` | cube-single-play-singletask-v0 | flow | 0 | 1M | `--agent.alpha=300 --eval_interval=50000 --save_interval=100000` | running (app `ap-KjWd1YjHTUPoIUtZwsFgzj`) | Wave 1. FQL reproduction check. |
-| 2026-11-16 23:18 | `midway/cube-single-play-singletask-v0/mip/sd000_20261117_041758` | cube-single-play-singletask-v0 | mip | 0 | 1M | same | running (same app) | Wave 1. |
-| 2026-11-16 23:18 | `midway/cube-single-play-singletask-v0/regression/sd000_20261117_041759` | cube-single-play-singletask-v0 | regression | 0 | 1M | same | running (same app) | Wave 1. |
+| 2026-11-16 23:18 | `midway/cube-single-play-singletask-v0/flow/sd000_20261117_041758` | cube-single-play-singletask-v0 | flow | 0 | 1M | `--agent.alpha=300 --eval_interval=50000 --save_interval=100000` | done (~45 min) | Wave 1. Final success 0.98 (last-3 mean 0.98); FQL reproduces (paper: ~0.9+). prior_spread 0.06, onestep_spread 0.06. |
+| 2026-11-16 23:18 | `midway/cube-single-play-singletask-v0/mip/sd000_20261117_041758` | cube-single-play-singletask-v0 | mip | 0 | 1M | same | done (~45 min) | Wave 1. Final 0.96 (last-3 0.96). prior_spread 0, onestep_spread 0.002. |
+| 2026-11-16 23:18 | `midway/cube-single-play-singletask-v0/regression/sd000_20261117_041759` | cube-single-play-singletask-v0 | regression | 0 | 1M | same | done (~45 min) | Wave 1. Final 0.98 (last-3 0.93, noisier). prior_spread 0, onestep_spread 0.003. |
 
 ## Planned (not launched; needs approval)
 

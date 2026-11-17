@@ -165,6 +165,10 @@ These bias toward caution over speed. For trivial tasks, use judgment.
   (≤20k steps, one seed) is fine; anything bigger, or any batch of runs, needs a yes.
 - Never change a hyperparameter silently. Any deviation from FQL's published settings
   goes in the run's flags and gets mentioned when reporting results.
+- **Every Modal run gets a row in `EXPERIMENTS.md`**, smoke tests included. At launch:
+  date, result path under `exp/fql/`, env, prior, seeds, steps, flags beyond defaults,
+  status (with the Modal app id). When it finishes or is stopped: update status and add
+  a one-line outcome (final success, anything odd). Commit the row with the launch.
 
 ### 1. Think before coding
 - State assumptions explicitly. If uncertain, ask.

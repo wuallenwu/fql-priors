@@ -32,6 +32,7 @@ def load(group):
             flags = json.load(f)
         run = {
             'seed': flags['seed'],
+            'alpha': flags['agent']['alpha'],
             'eval': read_csv(f'{dirpath}/eval.csv', ['step', 'evaluation/success']),
             'train': read_csv(
                 f'{dirpath}/train.csv', ['step', 'training/actor/prior_spread', 'training/actor/onestep_spread']
